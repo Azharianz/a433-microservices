@@ -1,0 +1,37 @@
+version: "3.2"
+services:
+  rabbitmq-sub:
+    image: rabbitmq:3.8-management-alpine
+    container_name: 'rabbitmq-sub'
+    ports:
+        - 5673:5672
+        - 15673:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - rabbitmq_network
+
+  order-sub:
+    image: rafiannas/order-service:latest
+    container_name: 'order-sub'
+    volumes:
+      - .:/src
+    depends_on:
+      - "rabbitmq-sub"
+    networks:
+      - rabbitmq_network
+
+  shipping-sub:
+    image: rafiannas/shipping-service:latest
+    container_name: 'shipping-sub'
+    volumes:
+      - .:/src
+    depends_on:
+      - "rabbitmq-sub"
+    networks:
+      - rabbitmq_network
+
+networks:
+  rabbitmq_network:
+    driver: bridge
