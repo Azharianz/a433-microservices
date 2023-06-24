@@ -2,9 +2,9 @@ version: "3.2"  #versi dari skript docker compose
 
 services:
  #menjelaskan service apa saja yang mau dibuat pada docker
-  rabbitmq-sub: #membuat container
+  rabbitmq: #membuat container
     image: rabbitmq:3.8-management-alpine #container dengan image rabbitmq versi 3.8 alpine
-    container_name: 'rabbitmq-sub' #set nama container
+    container_name: 'rabbitmq' #set nama container
     ports:
         - 5673:5672 #port pada lokal 5673 dan 5672 pada container (rabbitMQ)
         - 15673:15672 #port pada lokal 15673 dan 15672 pada container (management interface)
@@ -20,8 +20,8 @@ services:
     volumes:
       - .:/src  #menyalin berkas dari current ke folder src
     depends_on:
-      - "rabbitmq-sub"  #running setelah container rabbitmq-sub
-    command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30'
+      - "rabbitmq"  #running setelah container rabbitmq
+    command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30' #menunggu maksimal 30 detik untuk service rabbitmq aktif
     networks:
       - rabbitmq_network  #set network  
 
@@ -31,8 +31,8 @@ services:
     volumes:
       - .:/src #menyalin berkas dari current ke folder src
     depends_on:
-      - "rabbitmq-sub" #running setelah container rabbitmq-sub
-    command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30'
+      - "rabbitmq" #running setelah container rabbitmq
+    command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30' #menunggu maksimal 30 detik untuk service rabbitmq aktif
     networks:
       - rabbitmq_network #set network  
 
