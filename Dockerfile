@@ -1,9 +1,10 @@
 #mengampil image node versi 18 alpine
-FROM node:18-alpine 
+FROM node:18-alpine
 
  #mendefinisikan working directory ada di path /src
 WORKDIR /src
 
+RUN apk add --no-cache bash
 RUN wget -O /bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
 RUN chmod +x /bin/wait-for-it.sh
 
